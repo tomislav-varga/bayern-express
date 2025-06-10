@@ -7,15 +7,15 @@ const ServiceCard: FC<{
   icon: string;
 }> = ({ title, description, icon }) => {
   return (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-xl">
-      <div className="p-6">
+    <div className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-xl flex flex-col h-full">
+      <div className="p-6 flex-grow flex flex-col">
         <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6 mx-auto">
           <Image src={icon} alt={title} width={32} height={32} />
         </div>
         <h3 className="text-xl font-bold text-gray-800 mb-3 text-center">{title}</h3>
-        <p className="text-gray-600 text-center">{description}</p>
+        <p className="text-gray-600 text-center flex-grow">{description}</p>
       </div>
-      <div className="bg-blue-600 py-4">
+      <div className="bg-blue-600 py-4 mt-auto">
         <button className="block w-full text-center text-white font-medium">
           Mehr erfahren
         </button>
