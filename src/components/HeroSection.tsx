@@ -32,7 +32,7 @@ const HeroSection: FC = () => {
         
         <div className="md:w-1/2 flex justify-center">
           <Image 
-            src="/window.svg" 
+            src="/bayern-express-team.png" 
             alt="Wasserschaden Behebung" 
             width={500} 
             height={400}
