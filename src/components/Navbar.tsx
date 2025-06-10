@@ -21,13 +21,13 @@ const Navbar: FC = () => {
         <div className="flex items-center">
           <Link href="/" className="flex items-center">
             <Image 
-              src="/file.svg" 
+              src="/bayern-express-team-logo.png" 
               alt="Bayern Express Logo" 
               width={40} 
               height={40} 
               className="mr-2"
             />
-            <span className="text-xl font-bold text-blue-800">Bayern Express Trocknung</span>
+            <span className="text-xl font-bold text-blue-800">Bayern Express Team</span>
           </Link>
         </div>
         
