@@ -9,10 +9,12 @@ const ServiceCard: FC<{
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-xl flex flex-col h-full">
       <div className="p-6 flex-grow flex flex-col">
-        <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6 mx-auto">
-          <Image src={icon} alt={title} width={32} height={32} />
+        <div className="w-24 h-24 rounded-full flex items-center justify-center mb-6 mx-auto overflow-hidden">
+          <Image src={icon} alt={title} width={96} height={96} className="object-cover" />
         </div>
-        <h3 className="text-xl font-bold text-gray-800 mb-3 text-center">{title}</h3>
+        <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-3 text-center hyphens-auto break-words">
+          {title}
+        </h3>
         <p className="text-gray-600 text-center flex-grow">{description}</p>
       </div>
       <div className="bg-blue-600 py-4 mt-auto">
@@ -27,19 +29,19 @@ const ServiceCard: FC<{
 const ServicesSection: FC = () => {
   const services = [
     {
-      title: "Leckageortung",
-      description: "Mit modernster Technik spüren wir auch versteckte Lecks präzise und zerstörungsfrei auf.",
-      icon: "/file.svg"
+      title: "Gebäudemanagement",
+      description: "Professionelle Betreuung Ihrer Immobilie - von der regelmäßigen Inspektion bis zur vorbeugenden Wartung, um Wasserschäden zu vermeiden.",
+      icon: "/gebäude-mit-hof.png"
     },
     {
-      title: "Trocknung",
-      description: "Unsere leistungsstarken Trocknungsgeräte sorgen für eine schnelle und effiziente Trocknung aller betroffenen Bereiche.",
-      icon: "/file.svg"
+      title: "Wasserschadensanierung",
+      description: "Schnelle und effiziente Behebung von Wasserschäden aller Art - vom Rohrbruch bis zum Hochwasser, mit modernster Technik und erfahrenen Fachkräften.",
+      icon: "/wohnzimmer-unter-wasser.png"
     },
     {
-      title: "Sanierung",
-      description: "Nach der Trocknung kümmern wir uns um die fachgerechte Wiederherstellung und Sanierung der betroffenen Räume.",
-      icon: "/file.svg"
+      title: "Renovierung",
+      description: "Komplette Wiederherstellung nach Wasserschäden - von der Trocknung über die Schimmelbeseitigung bis hin zum fachgerechten Wiederaufbau Ihrer Räume.",
+      icon: "/zimmer-renovierung.png"
     }
   ];
 
@@ -52,11 +54,11 @@ const ServicesSection: FC = () => {
           </h2>
           <div className="w-20 h-1 bg-blue-600 mx-auto mb-8"></div>
           <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-            Wir bieten Ihnen ein umfassendes Leistungsspektrum rund um die Behebung von Wasserschäden. Von der Leckageortung über die Trocknung bis hin zur vollständigen Sanierung - bei uns erhalten Sie alles aus einer Hand.
+            Wir bieten Ihnen ein umfassendes Leistungsspektrum rund um Immobilien und Wasserschäden. Von der vorbeugenden Gebäudepflege über die schnelle Schadensbehebung bis hin zur kompletten Renovierung - bei uns erhalten Sie alles aus einer Hand.
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {services.map((service, index) => (
             <ServiceCard
               key={index}
