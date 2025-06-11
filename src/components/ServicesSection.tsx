@@ -1,11 +1,13 @@
 import { FC } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const ServiceCard: FC<{
   title: string;
   description: string;
   icon: string;
-}> = ({ title, description, icon }) => {
+  slug: string;
+}> = ({ title, description, icon, slug }) => {
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-xl flex flex-col h-full">
       <div className="p-6 flex-grow flex flex-col">
@@ -17,10 +19,10 @@ const ServiceCard: FC<{
         </h3>
         <p className="text-gray-600 text-center flex-grow">{description}</p>
       </div>
-      <div className="bg-blue-600 py-4 mt-auto">
-        <button className="block w-full text-center text-white font-medium">
+      <div className="bg-blue-600 hover:bg-blue-700 transition-colors duration-300 py-4 mt-auto">
+        <Link href={`/leistungen/${slug}`} className="block w-full text-center text-white font-medium">
           Mehr erfahren
-        </button>
+        </Link>
       </div>
     </div>
   );
@@ -31,17 +33,20 @@ const ServicesSection: FC = () => {
     {
       title: "Gebäudemanagement",
       description: "Professionelle Betreuung Ihrer Immobilie - von der regelmäßigen Inspektion bis zur vorbeugenden Wartung, um Wasserschäden zu vermeiden.",
-      icon: "/gebäude-mit-hof.png"
+      icon: "/gebäude-mit-hof.png",
+      slug: "gebaeudemanagement"
     },
     {
       title: "Wasserschadensanierung",
       description: "Schnelle und effiziente Behebung von Wasserschäden aller Art - vom Rohrbruch bis zum Hochwasser, mit modernster Technik und erfahrenen Fachkräften.",
-      icon: "/wohnzimmer-unter-wasser.png"
+      icon: "/wohnzimmer-unter-wasser.png",
+      slug: "wasserschadensanierung"
     },
     {
       title: "Renovierung",
       description: "Komplette Wiederherstellung nach Wasserschäden - von der Trocknung über die Schimmelbeseitigung bis hin zum fachgerechten Wiederaufbau Ihrer Räume.",
-      icon: "/zimmer-renovierung.png"
+      icon: "/zimmer-renovierung.png",
+      slug: "renovierung"
     }
   ];
 
@@ -65,6 +70,7 @@ const ServicesSection: FC = () => {
               title={service.title}
               description={service.description}
               icon={service.icon}
+              slug={service.slug}
             />
           ))}
         </div>
