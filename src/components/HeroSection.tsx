@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const HeroSection: FC = () => {
   return (
@@ -21,12 +22,12 @@ const HeroSection: FC = () => {
             Schnell, zuverlässig und professionell. Wir sind 24/7 für Sie da, wenn das Wasser einmal nicht dort ist, wo es sein sollte.
           </p>
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-            <button className="bg-white text-blue-900 hover:bg-blue-100 px-8 py-4 rounded-md font-semibold transition duration-300 shadow-lg">
+            <Link href="#contact" className="bg-white text-blue-900 hover:bg-blue-100 px-8 py-4 rounded-md font-semibold transition duration-300 shadow-lg text-center">
               Kostenlose Beratung
-            </button>
-            <button className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-900 px-8 py-4 rounded-md font-semibold transition duration-300">
+            </Link>
+            <Link href="#services" className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-900 px-8 py-4 rounded-md font-semibold transition duration-300 text-center">
               Unsere Leistungen
-            </button>
+            </Link>
           </div>
         </div>
         
