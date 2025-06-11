@@ -137,7 +137,7 @@ const ServiceDetailPage = ({ params }: ServiceDetailPageProps) => {
                 </Link>
                 
                 <Link
-                  href="#kontakt"
+                  href="/#contact"
                   className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium transition duration-300 shadow-md"
                 >
                   Kostenlose Beratung anfordern
