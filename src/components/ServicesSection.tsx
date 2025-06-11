@@ -76,9 +76,13 @@ const ServicesSection: FC = () => {
         </div>
         
         <div className="mt-16 text-center">
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-md font-semibold transition duration-300 shadow-lg">
+
+          <Link 
+            href="#contact" 
+            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-md font-semibold transition duration-300 shadow-lg inline-block"
+          >
             Kostenlose Beratung anfordern
-          </button>
+          </Link>
         </div>
       </div>
     </section>
