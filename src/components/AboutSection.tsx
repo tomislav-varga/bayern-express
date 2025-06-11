@@ -8,7 +8,7 @@ const AboutSection: FC = () => {
         <div className="flex flex-col md:flex-row items-center">
           <div className="md:w-1/2 mb-10 md:mb-0 md:pr-10">
             <Image 
-              src="/globe.svg" 
+              src="/bayern-express-team.png" 
               alt="Über Bayern Express" 
               width={500} 
               height={400}
