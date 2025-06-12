@@ -20,13 +20,6 @@ const Navbar: FC = () => {
             <div className="container mx-auto px-4 py-4 flex justify-between items-center">
                 <div className="flex items-center">
                     <Link href="/" className="flex items-center">
-                        {/*             <Image 
-              src="/bayern-express-team-logo.png" 
-              alt="Bayern Express Logo" 
-              width={40} 
-              height={40} 
-              className="mr-2"
-            /> */}
                         <Image
                             src="/bayern-express-team-schrift.jpg"
                             alt="Bayern Express Schriftzug"
