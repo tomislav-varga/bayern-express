@@ -33,10 +33,10 @@ const HeroSection: FC = () => {
         
         <div className="md:w-5/12 flex justify-center">
           <Image 
-            src="/wohzimmer-unter-wasser-skizziert.png" 
+            src="/wohnzimmer-wasserwelle.png" 
             alt="Wasserschaden Behebung" 
-            width={500} 
-            height={400}
+            width={600} 
+            height={600}
             className="rounded-lg shadow-2xl"
           />
         </div>
