@@ -19,6 +19,17 @@
   }
 }
 
+/* Countdown animation for status messages */
+@keyframes countdown {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+.countdown-animation {
+  width: 100%;
+  animation: countdown 5s linear forwards;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

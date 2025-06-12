@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useState, FormEvent, ChangeEvent } from 'react';
+import { FC, useState, FormEvent, ChangeEvent, useEffect, useRef } from 'react';
 import GoogleMapComponent from './GoogleMapComponent';
 
 interface FormData {
@@ -33,6 +33,31 @@ const ContactSection: FC = () => {
     message?: string;
   }>({});
   const [errors, setErrors] = useState<FormErrors>({});
+  
+  // Ref to store the timeout ID
+  const messageTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Clear message after 5 seconds when it appears
+  useEffect(() => {
+    if (submitStatus.message) {
+      // Clear any existing timeout
+      if (messageTimeoutRef.current) {
+        clearTimeout(messageTimeoutRef.current);
+      }
+      
+      // Set new timeout
+      messageTimeoutRef.current = setTimeout(() => {
+        setSubmitStatus({});
+      }, 5000);
+    }
+    
+    // Cleanup on unmount
+    return () => {
+      if (messageTimeoutRef.current) {
+        clearTimeout(messageTimeoutRef.current);
+      }
+    };
+  }, [submitStatus.message]);
   
   // Handle input changes
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -208,10 +233,30 @@ const ContactSection: FC = () => {
           <div className="bg-white/10 backdrop-blur-sm p-8 rounded-lg">
             <h3 className="text-xl font-semibold mb-4">Schnellkontakt</h3>
             
-            {/* Status message display */}
+            {/* Status message display with countdown animation */}
             {submitStatus.message && (
-              <div className={`p-4 mb-4 rounded-md ${submitStatus.success ? 'bg-green-600/40' : 'bg-red-600/40'}`}>
-                {submitStatus.message}
+              <div 
+                className={`p-4 mb-4 rounded-md relative overflow-hidden ${
+                  submitStatus.success 
+                    ? 'bg-green-600/40 border border-green-400/50' 
+                    : 'bg-red-600/40 border border-red-400/50'
+                }`}
+              >
+                <div className="flex items-center">
+                  {submitStatus.success ? (
+                    <svg className="w-5 h-5 mr-2 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5 mr-2 text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                  )}
+                  {submitStatus.message}
+                </div>
+                <div 
+                  className="absolute bottom-0 left-0 h-1 bg-white/60 countdown-animation"
+                />
               </div>
             )}
             
