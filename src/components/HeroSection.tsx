@@ -13,8 +13,8 @@ const HeroSection: FC = () => {
         }} />
       </div>
       
-      <div className="container mx-auto px-4 py-24 md:py-32 flex flex-col md:flex-row items-center relative z-10">
-        <div className="md:w-1/2 mb-12 md:mb-0">
+      <div className="container mx-auto px-4 py-24 md:py-32 flex flex-col md:flex-row items-center justify-between relative z-10">
+        <div className="md:w-1/2 mb-12 md:mb-0 md:pr-8 lg:pr-12">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
             Professionelle Wasserschaden-Behebung in Bayern
           </h1>
@@ -31,7 +31,7 @@ const HeroSection: FC = () => {
           </div>
         </div>
         
-        <div className="md:w-1/2 flex justify-center">
+        <div className="md:w-5/12 flex justify-center">
           <Image 
             src="/bayern-express-team.png" 
             alt="Wasserschaden Behebung" 
