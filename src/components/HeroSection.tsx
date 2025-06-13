@@ -13,32 +13,46 @@ const HeroSection: FC = () => {
         }} />
       </div>
       
-      <div className="container mx-auto px-4 py-24 md:py-32 flex flex-col md:flex-row items-center justify-between relative z-10">
-        <div className="md:w-1/2 mb-12 md:mb-0 md:pr-8 lg:pr-12">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-            Professionelle Wasserschaden-Behebung in Bayern
-          </h1>
-          <p className="text-lg md:text-xl text-blue-100 mb-8 max-w-lg">
-            Schnell, zuverlässig und professionell. Wir sind 24/7 für Sie da, wenn das Wasser einmal nicht dort ist, wo es sein sollte.
-          </p>
-          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-            <Link href="#contact" className="bg-white text-blue-900 hover:bg-blue-100 px-8 py-4 rounded-md font-semibold transition duration-300 shadow-lg text-center">
-              Kostenlose Beratung
-            </Link>
-            <Link href="#services" className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-900 px-8 py-4 rounded-md font-semibold transition duration-300 text-center">
-              Unsere Leistungen
-            </Link>
-          </div>
-        </div>
-        
-        <div className="md:w-5/12 flex justify-center">
+      <div className="container mx-auto px-4 py-24 md:py-32 flex flex-col relative z-10">
+        {/* Mobile: Image first, then text */}
+        <div className="md:hidden flex justify-center mb-10">
           <Image 
             src="/wohnzimmer-wasserwelle.png" 
             alt="Wasserschaden Behebung" 
-            width={600} 
-            height={600}
+            width={500} 
+            height={500}
             className="rounded-lg shadow-2xl"
           />
+        </div>
+
+        <div className="flex flex-col md:flex-row items-center justify-between">
+          <div className="md:w-1/2 md:pr-8 lg:pr-12">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+              Professionelle Wasserschaden-Behebung in Bayern
+            </h1>
+            <p className="text-lg md:text-xl text-blue-100 mb-8 max-w-lg">
+              Schnell, zuverlässig und professionell. Wir sind 24/7 für Sie da, wenn das Wasser einmal nicht dort ist, wo es sein sollte.
+            </p>
+            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+              <Link href="#contact" className="bg-white text-blue-900 hover:bg-blue-100 px-8 py-4 rounded-md font-semibold transition duration-300 shadow-lg text-center">
+                Kostenlose Beratung
+              </Link>
+              <Link href="#services" className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-900 px-8 py-4 rounded-md font-semibold transition duration-300 text-center">
+                Unsere Leistungen
+              </Link>
+            </div>
+          </div>
+          
+          {/* Desktop: Show image on the right */}
+          <div className="hidden md:flex md:w-5/12 justify-center">
+            <Image 
+              src="/wohnzimmer-wasserwelle.png" 
+              alt="Wasserschaden Behebung" 
+              width={600} 
+              height={600}
+              className="rounded-lg shadow-2xl"
+            />
+          </div>
         </div>
       </div>
     </section>
