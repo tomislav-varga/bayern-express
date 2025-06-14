@@ -85,14 +85,14 @@ const servicesData = [
   }
 ];
 
-// Define correct page props type for Next.js App Router
-type Props = {
+// Next.js App Router page component props
+type PageProps = {
   params: { slug: string }
-  searchParams: { [key: string]: string | string[] | undefined }
+  searchParams?: { [key: string]: string | string[] | undefined }
 }
 
 // This is a Server Component
-export default function ServiceDetailPage({ params }: Props) {
+export default function ServiceDetailPage({ params }: PageProps) {
   // Finde den Service anhand des Slugs
   const service = servicesData.find(service => service.slug === params.slug);
   
