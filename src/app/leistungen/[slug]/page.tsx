@@ -88,19 +88,15 @@ const servicesData = [
 // Next.js App Router page component props
 type PageProps = {
   params: { slug: string }
-  searchParams?: { [key: string]: string | string[] | undefined }
-}
+};
 
-// This is a Server Component
-export default function ServiceDetailPage({ params }: PageProps) {
-  // Finde den Service anhand des Slugs
+export default async function ServiceDetailPage({ params }: PageProps) {
   const service = servicesData.find(service => service.slug === params.slug);
   
-  // Wenn kein Service gefunden wurde, zeige 404-Seite
   if (!service) {
     notFound();
   }
-  
+
   return (
     <>
       <Navbar />
@@ -123,9 +119,9 @@ export default function ServiceDetailPage({ params }: PageProps) {
                   <p className="text-lg text-gray-600">{service.description}</p>
                 </div>
               </div>
-              
+
               <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: service.fullDescription }} />
-              
+
               <div className="mt-10 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
                 <Link
                   href="/#services"
