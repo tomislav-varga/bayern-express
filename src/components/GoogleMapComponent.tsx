@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useState, useCallback } from 'react';
+import { FC } from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
 interface GoogleMapComponentProps {
@@ -29,21 +29,8 @@ const GoogleMapComponent: FC<GoogleMapComponentProps> = ({
   width = '100%',
   zoom = 15
 }) => {
-  // Store the map instance
-  const [map, setMap] = useState<google.maps.Map | null>(null);
-  
   // Google Maps API key from environment variables
   const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '';
-  
-  // Callback when the map is loaded
-  const onLoad = useCallback((map: google.maps.Map) => {
-    setMap(map);
-  }, []);
-  
-  // Callback when the map is unmounted
-  const onUnmount = useCallback(() => {
-    setMap(null);
-  }, []);
   
   // If no API key is provided, show a static fallback
   if (!googleMapsApiKey || googleMapsApiKey === 'YOUR_GOOGLE_MAPS_API_KEY') {
@@ -75,8 +62,6 @@ const GoogleMapComponent: FC<GoogleMapComponentProps> = ({
           mapContainerStyle={containerStyle}
           center={COORDINATES}
           zoom={zoom}
-          onLoad={onLoad}
-          onUnmount={onUnmount}
           options={{
             zoomControl: true,
             mapTypeControl: false,
