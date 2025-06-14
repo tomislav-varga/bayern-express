@@ -1,6 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/utils/mongodb';
 import ContactMessage from '@/models/ContactMessage';
+import axios from 'axios';
+
+interface ValidationError {
+  name: string;
+  errors: Record<string, { message: string }>;
+}
+
+// Function to verify reCAPTCHA token
+async function verifyRecaptcha(token: string) {
+  try {
+    const response = await axios.post(
+      'https://www.google.com/recaptcha/api/siteverify',
+      null,
+      {
+        params: {
+          secret: process.env.RECAPTCHA_SECRET_KEY,
+          response: token
+        }
+      }
+    );
+    
+    return response.data.success;
+  } catch (error) {
+    console.error('reCAPTCHA verification error:', error);
+    return false;
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,11 +38,28 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     
     // Validate required fields
-    const { name, email, phone, message } = body;
+    const { name, email, phone, message, recaptchaToken } = body;
     
     if (!name || !email || !phone || !message) {
       return NextResponse.json(
         { success: false, message: 'Alle Felder sind erforderlich' },
+        { status: 400 }
+      );
+    }
+    
+    // Verify reCAPTCHA
+    if (!recaptchaToken) {
+      return NextResponse.json(
+        { success: false, message: 'reCAPTCHA-Verifizierung erforderlich' },
+        { status: 400 }
+      );
+    }
+    
+    const isRecaptchaValid = await verifyRecaptcha(recaptchaToken);
+    
+    if (!isRecaptchaValid) {
+      return NextResponse.json(
+        { success: false, message: 'reCAPTCHA-Verifizierung fehlgeschlagen' },
         { status: 400 }
       );
     }
@@ -37,12 +81,19 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
     
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error in contact API:', error);
     
     // Check for validation errors
-    if (error.name === 'ValidationError') {
-      const validationErrors = Object.values(error.errors).map((err: any) => err.message);
+    if (
+      error && 
+      typeof error === 'object' && 
+      'name' in error && 
+      error.name === 'ValidationError' &&
+      'errors' in error
+    ) {
+      const validationError = error as ValidationError;
+      const validationErrors = Object.values(validationError.errors).map(err => err.message);
       
       return NextResponse.json(
         { success: false, message: 'Validierungsfehler', errors: validationErrors },
@@ -51,7 +102,14 @@ export async function POST(request: NextRequest) {
     }
     
     // Check for MongoDB connection errors
-    if (error.name === 'MongooseError' || error.name === 'MongoError' || error.message.includes('MongoDB')) {
+    if (
+      error && 
+      typeof error === 'object' && 
+      (
+        ('name' in error && (error.name === 'MongooseError' || error.name === 'MongoError')) ||
+        ('message' in error && typeof error.message === 'string' && error.message.includes('MongoDB'))
+      )
+    ) {
       return NextResponse.json(
         { success: false, message: 'Datenbank-Verbindungsfehler. Bitte versuchen Sie es später erneut.' },
         { status: 503 }

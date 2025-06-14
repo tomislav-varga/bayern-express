@@ -2,6 +2,7 @@
 
 import { FC, useState, FormEvent, ChangeEvent, useEffect, useRef } from 'react';
 import GoogleMapComponent from './GoogleMapComponent';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 interface FormData {
   name: string;
@@ -15,6 +16,7 @@ interface FormErrors {
   email?: string;
   phone?: string;
   message?: string;
+  captcha?: string;
 }
 
 const ContactSection: FC = () => {
@@ -36,6 +38,13 @@ const ContactSection: FC = () => {
   
   // Ref to store the timeout ID
   const messageTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // State and ref for reCAPTCHA
+  const [captchaValue, setCaptchaValue] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  
+  // State to track if the form has been attempted to be submitted
+  const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
   
   // Clear message after 5 seconds when it appears
   useEffect(() => {
@@ -76,8 +85,8 @@ const ContactSection: FC = () => {
     }
   };
   
-  // Validate form
-  const validateForm = (): boolean => {
+  // Validate form without captcha check
+  const validateFormFields = (): boolean => {
     const newErrors: FormErrors = {};
     
     if (!formData.name.trim()) {
@@ -102,11 +111,52 @@ const ContactSection: FC = () => {
     return Object.keys(newErrors).length === 0;
   };
   
+  // Full validation including captcha if visible
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {};
+    
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name ist erforderlich';
+    }
+    
+    if (!formData.email.trim()) {
+      newErrors.email = 'E-Mail ist erforderlich';
+    } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+      newErrors.email = 'Bitte geben Sie eine gültige E-Mail-Adresse ein';
+    }
+    
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Telefonnummer ist erforderlich';
+    }
+    
+    if (!formData.message.trim()) {
+      newErrors.message = 'Nachricht ist erforderlich';
+    }
+    
+    // Only validate captcha if it's visible
+    if (showCaptcha && !captchaValue) {
+      newErrors.captcha = 'Bitte bestätigen Sie, dass Sie kein Roboter sind';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+  
   // Handle form submission
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    // Validate form
+    // If captcha is not yet shown, validate form fields and show captcha if valid
+    if (!showCaptcha) {
+      // Validate the form fields first (without captcha)
+      const fieldsValid = validateFormFields();
+      if (fieldsValid) {
+        setShowCaptcha(true);
+      }
+      return;
+    }
+    
+    // With captcha shown, perform full validation
     if (!validateForm()) {
       return;
     }
@@ -121,7 +171,10 @@ const ContactSection: FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          recaptchaToken: captchaValue
+        }),
       });
       
       const data = await response.json();
@@ -134,6 +187,13 @@ const ContactSection: FC = () => {
           phone: '',
           message: ''
         });
+        
+        // Reset reCAPTCHA and hide it
+        if (recaptchaRef.current) {
+          recaptchaRef.current.reset();
+        }
+        setCaptchaValue(null);
+        setShowCaptcha(false);
         
         setSubmitStatus({
           success: true,
@@ -153,6 +213,7 @@ const ContactSection: FC = () => {
             if (error.includes('E-Mail')) serverErrors.email = error;
             if (error.includes('Telefon')) serverErrors.phone = error;
             if (error.includes('Nachricht')) serverErrors.message = error;
+            if (error.includes('reCAPTCHA') || error.includes('Roboter')) serverErrors.captcha = error;
           });
           setErrors(serverErrors);
         }
@@ -273,6 +334,22 @@ const ContactSection: FC = () => {
                 )}
               </div>
               
+              {/* Only show reCAPTCHA after the first submission attempt */}
+              {showCaptcha && (
+                <div className="my-4">
+                  <ReCAPTCHA
+                    ref={recaptchaRef}
+                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ''}
+                    onChange={(value: string | null) => setCaptchaValue(value)}
+                    className="transform scale-90 origin-left"
+                    theme="dark"
+                  />
+                  {errors.captcha && (
+                    <p className="mt-1 text-sm text-red-300">{errors.captcha}</p>
+                  )}
+                </div>
+              )}
+              
               <button 
                 type="submit" 
                 disabled={isSubmitting}
@@ -286,7 +363,7 @@ const ContactSection: FC = () => {
                     </svg>
                     Wird gesendet...
                   </>
-                ) : 'Nachricht senden'}
+                ) : showCaptcha ? 'Nachricht senden' : 'Formular prüfen'}
               </button>
             </form>
           </div>
