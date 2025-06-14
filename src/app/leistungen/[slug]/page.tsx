@@ -3,15 +3,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import React, { JSX } from 'react';
 
 // Definiere die Services-Daten für die Detailseiten
 const servicesData = [
-  {
-    title: "Gebäudemanagement",
-    description: "Professionelle Betreuung Ihrer Immobilie - von der regelmäßigen Inspektion bis zur vorbeugenden Wartung, um Wasserschäden zu vermeiden.",
-    icon: "/gebäude-mit-hof.png",
-    slug: "gebaeudemanagement",
-    fullDescription: `
+    {
+        title: "Gebäudemanagement",
+        description: "Professionelle Betreuung Ihrer Immobilie - von der regelmäßigen Inspektion bis zur vorbeugenden Wartung, um Wasserschäden zu vermeiden.",
+        icon: "/gebäude-mit-hof.png",
+        slug: "gebaeudemanagement",
+        fullDescription: `
       <h2>Professionelles Gebäudemanagement für Ihre Immobilie</h2>
       <p>Unser umfassendes Gebäudemanagement sorgt dafür, dass Ihre Immobilie stets in bestem Zustand bleibt. Wir übernehmen die regelmäßige Inspektion und Wartung aller Gebäudekomponenten, um potenzielle Probleme frühzeitig zu erkennen und zu beheben, bevor sie zu kostspieligen Schäden führen.</p>
       
@@ -30,13 +31,13 @@ const servicesData = [
       
       <p>Kontaktieren Sie uns noch heute für ein individuelles Angebot, das genau auf die Bedürfnisse Ihrer Immobilie zugeschnitten ist. Wir beraten Sie gerne persönlich und erstellen einen maßgeschneiderten Wartungsplan für Ihr Gebäude.</p>
     `
-  },
-  {
-    title: "Wasserschadensanierung",
-    description: "Schnelle und effiziente Behebung von Wasserschäden aller Art - vom Rohrbruch bis zum Hochwasser, mit modernster Technik und erfahrenen Fachkräften.",
-    icon: "/wohnzimmer-unter-wasser.png",
-    slug: "wasserschadensanierung",
-    fullDescription: `
+    },
+    {
+        title: "Wasserschadensanierung",
+        description: "Schnelle und effiziente Behebung von Wasserschäden aller Art - vom Rohrbruch bis zum Hochwasser, mit modernster Technik und erfahrenen Fachkräften.",
+        icon: "/wohnzimmer-unter-wasser.png",
+        slug: "wasserschadensanierung",
+        fullDescription: `
       <h2>Professionelle Wasserschadensanierung</h2>
       <p>Wenn das Wasser erst einmal in Ihr Gebäude eingedrungen ist, zählt jede Minute. Unsere Experten für Wasserschadensanierung sind rund um die Uhr für Sie im Einsatz, um schnell und effizient alle Arten von Wasserschäden zu beheben – vom kleinsten Rohrbruch bis hin zu umfangreichen Hochwasserschäden.</p>
       
@@ -56,13 +57,13 @@ const servicesData = [
       
       <p>Im Notfall erreichen Sie uns 24 Stunden am Tag, 7 Tage die Woche. Unsere Techniker sind innerhalb kürzester Zeit bei Ihnen vor Ort, um den Schaden zu begrenzen und mit der professionellen Sanierung zu beginnen.</p>
     `
-  },
-  {
-    title: "Renovierung",
-    description: "Komplette Wiederherstellung nach Wasserschäden - von der Trocknung über die Schimmelbeseitigung bis hin zum fachgerechten Wiederaufbau Ihrer Räume.",
-    icon: "/zimmer-renovierung.png",
-    slug: "renovierung",
-    fullDescription: `
+    },
+    {
+        title: "Renovierung",
+        description: "Komplette Wiederherstellung nach Wasserschäden - von der Trocknung über die Schimmelbeseitigung bis hin zum fachgerechten Wiederaufbau Ihrer Räume.",
+        icon: "/zimmer-renovierung.png",
+        slug: "renovierung",
+        fullDescription: `
       <h2>Fachgerechte Renovierung nach Wasserschäden</h2>
       <p>Nach der erfolgreichen Trocknung und Sanierung eines Wasserschadens ist eine professionelle Renovierung der betroffenen Bereiche der letzte wichtige Schritt, um Ihre Räume wieder in ihren ursprünglichen Zustand zu versetzen oder sogar zu verbessern. Unser erfahrenes Renovierungsteam sorgt dafür, dass von dem Wasserschaden keine Spuren mehr zu sehen sind.</p>
       
@@ -82,69 +83,72 @@ const servicesData = [
       
       <p>Als Komplettanbieter koordinieren wir alle notwendigen Gewerke und sorgen für einen reibungslosen Ablauf. Sie haben nur einen Ansprechpartner und müssen sich um nichts kümmern. Sprechen Sie uns an – wir beraten Sie gerne zu den Möglichkeiten der Renovierung nach einem Wasserschaden.</p>
     `
-  }
+    }
 ];
 
 // Next.js App Router page component props
-type PageProps = {
-  params: { slug: string }
-};
 
-export default async function ServiceDetailPage({ params }: PageProps) {
-  const service = servicesData.find(service => service.slug === params.slug);
-  
-  if (!service) {
+export default async function ServiceDetailPage({ 
+    params,
+}: {
+    params: Promise<{ slug: string }>;
+}): Promise<JSX.Element> {
+    const { slug } = await params;
+const service = servicesData.find(service => service.slug === slug);
+
+
+if (!service) {
     notFound();
-  }
+}
 
-  return (
+return (
     <>
-      <Navbar />
-      <main className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
-            <div className="p-8">
-              <div className="flex flex-col md:flex-row items-center mb-8">
-                <div className="w-32 h-32 rounded-full overflow-hidden mb-6 md:mb-0 md:mr-8">
-                  <Image 
-                    src={service.icon} 
-                    alt={service.title} 
-                    width={128} 
-                    height={128} 
-                    className="object-cover"
-                  />
-                </div>
-                <div>
-                  <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{service.title}</h1>
-                  <p className="text-lg text-gray-600">{service.description}</p>
-                </div>
-              </div>
+        <Navbar />
+        <main className="py-16 bg-gray-50">
+            <div className="container mx-auto px-4">
+                <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div className="p-8">
+                        <div className="flex flex-col md:flex-row items-center mb-8">
+                            <div className="w-32 h-32 rounded-full overflow-hidden mb-6 md:mb-0 md:mr-8">
+                                <Image
+                                    src={service.icon}
+                                    alt={service.title}
+                                    width={128}
+                                    height={128}
+                                    className="object-cover"
+                                />
+                            </div>
+                            <div>
+                                <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{service.title}</h1>
+                                <p className="text-lg text-gray-600">{service.description}</p>
+                            </div>
+                        </div>
 
-              <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: service.fullDescription }} />
+                        <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: service.fullDescription }} />
 
-              <div className="mt-10 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-                <Link
-                  href="/#services"
-                  className="inline-flex items-center text-blue-600 hover:text-blue-800"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                  </svg>
-                  Zurück zu allen Leistungen
-                </Link>
-                
-                <Link
-                  href="/#contact"
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium transition duration-300 shadow-md"
-                >
-                  Kostenlose Beratung anfordern
-                </Link>
-              </div>
+                        <div className="mt-10 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+                            <Link
+                                href="/#services"
+                                className="inline-flex items-center text-blue-600 hover:text-blue-800"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                </svg>
+                                Zurück zu allen Leistungen
+                            </Link>
+
+                            <Link
+                                href="/#contact"
+                                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium transition duration-300 shadow-md"
+                            >
+                                Kostenlose Beratung anfordern
+                            </Link>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </main>
-      <Footer />
+        </main>
+        <Footer />
     </>
-  );
+);
 }
