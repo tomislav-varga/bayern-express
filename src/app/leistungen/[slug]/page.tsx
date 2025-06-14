@@ -85,13 +85,12 @@ const servicesData = [
   }
 ];
 
-interface ServiceDetailPageProps {
-  params: {
-    slug: string;
-  };
+interface Params {
+  slug: string;
 }
 
-const ServiceDetailPage = ({ params }: ServiceDetailPageProps) => {
+// This is a Server Component, so we need to make it async
+export default async function ServiceDetailPage({ params }: { params: Params }) {
   // Finde den Service anhand des Slugs
   const service = servicesData.find(service => service.slug === params.slug);
   
@@ -150,6 +149,4 @@ const ServiceDetailPage = ({ params }: ServiceDetailPageProps) => {
       <Footer />
     </>
   );
-};
-
-export default ServiceDetailPage;
+}
