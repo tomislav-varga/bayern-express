@@ -5,25 +5,24 @@ import Link from 'next/link';
 const HeroSection: FC = () => {
   return (
     <section className="relative bg-blue-900 text-white overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0" style={{ 
-          backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.4\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
-          backgroundSize: '60px 60px'
-        }} />
+      {/* Background Image */}
+      <div className="absolute inset-0">
+        <Image
+          src="/wohnzimmer-wasserwelle.png"
+          alt="Wasserschaden Hintergrund"
+          fill
+          style={{
+            objectFit: 'cover',
+            objectPosition: 'center',
+            opacity: 0.45// Semi-transparent to maintain text readability
+          }}
+          priority
+        />
+        {/* Gradient overlay to improve text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-900 via-blue-800/90 to-blue-900/80 mix-blend-multiply" />
       </div>
-      
+
       <div className="container mx-auto px-4 py-24 md:py-32 flex flex-col relative z-10">
-        {/* Mobile: Image first, then text */}
-        <div className="md:hidden flex justify-center mb-10">
-          <Image 
-            src="/wohnzimmer-wasserwelle.png" 
-            alt="Wasserschaden Behebung" 
-            width={500} 
-            height={500}
-            className="rounded-lg shadow-2xl"
-          />
-        </div>
 
         <div className="flex flex-col md:flex-row items-center justify-between">
           <div className="md:w-1/2 md:pr-8 lg:pr-12">
@@ -41,17 +40,6 @@ const HeroSection: FC = () => {
                 Unsere Leistungen
               </Link>
             </div>
-          </div>
-          
-          {/* Desktop: Show image on the right */}
-          <div className="hidden md:flex md:w-5/12 justify-center">
-            <Image 
-              src="/wohnzimmer-wasserwelle.png" 
-              alt="Wasserschaden Behebung" 
-              width={600} 
-              height={600}
-              className="rounded-lg shadow-2xl"
-            />
           </div>
         </div>
       </div>
