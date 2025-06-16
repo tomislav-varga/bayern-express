@@ -88,67 +88,67 @@ const servicesData = [
 
 // Next.js App Router page component props
 
-export default async function ServiceDetailPage({ 
+export default async function ServiceDetailPage({
     params,
 }: {
     params: Promise<{ slug: string }>;
 }): Promise<JSX.Element> {
     const { slug } = await params;
-const service = servicesData.find(service => service.slug === slug);
+    const service = servicesData.find(service => service.slug === slug);
 
 
-if (!service) {
-    notFound();
-}
+    if (!service) {
+        notFound();
+    }
 
-return (
-    <>
-        <Navbar />
-        <main className="py-16 bg-gray-50">
-            <div className="container mx-auto px-4">
-                <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
-                    <div className="p-8">
-                        <div className="flex flex-col md:flex-row items-center mb-8">
-                            <div className="w-32 h-32 rounded-full overflow-hidden mb-6 md:mb-0 md:mr-8">
-                                <Image
-                                    src={service.icon}
-                                    alt={service.title}
-                                    width={128}
-                                    height={128}
-                                    className="object-cover"
-                                />
+    return (
+        <>
+            <Navbar />
+            <main className="py-16 bg-gray-50">
+                <div className="container mx-auto px-4">
+                    <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+                        <div className="p-8">
+                            <div className="flex flex-col md:flex-row items-center mb-8">
+                                <div className="w-32 h-32 rounded-full overflow-hidden mb-6 md:mb-0 md:mr-8">
+                                    <Image
+                                        src={service.icon}
+                                        alt={service.title}
+                                        width={128}
+                                        height={128}
+                                        className="object-cover"
+                                    />
+                                </div>
+                                <div>
+                                    <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{service.title}</h1>
+                                    <p className="text-lg text-gray-800">{service.description}</p>
+                                </div>
                             </div>
-                            <div>
-                                <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{service.title}</h1>
-                                <p className="text-lg text-gray-600">{service.description}</p>
+
+                            <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: service.fullDescription }} />
+
+                            <div className="mt-10 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+                                <Link
+                                    href="/#services"
+                                    className="inline-flex items-center text-blue-600 hover:text-blue-800"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                    </svg>
+                                    Zurück zu allen Leistungen
+                                </Link>
+
+                                <Link
+                                    href="/#contact"
+                                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium transition duration-300 shadow-md"
+                                >
+                                    Kostenlose Beratung anfordern
+                                </Link>
                             </div>
-                        </div>
-
-                        <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: service.fullDescription }} />
-
-                        <div className="mt-10 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-                            <Link
-                                href="/#services"
-                                className="inline-flex items-center text-blue-600 hover:text-blue-800"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                                </svg>
-                                Zurück zu allen Leistungen
-                            </Link>
-
-                            <Link
-                                href="/#contact"
-                                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium transition duration-300 shadow-md"
-                            >
-                                Kostenlose Beratung anfordern
-                            </Link>
                         </div>
                     </div>
                 </div>
-            </div>
-        </main>
-        <Footer />
-    </>
-);
+            </main>
+            <Footer />
+        </>
+    );
 }
