@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const AboutSection: FC = () => {
   return (
@@ -69,9 +70,12 @@ const AboutSection: FC = () => {
               </div>
             </div>
             
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium transition duration-300 shadow-md">
-              Mehr über uns erfahren
-            </button>
+             <Link 
+            href="#contact" 
+            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-md font-semibold transition duration-300 shadow-lg inline-block"
+          >
+            Kostenlose Beratung anfordern
+          </Link>
           </div>
         </div>
       </div>
