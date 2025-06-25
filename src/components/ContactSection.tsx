@@ -43,9 +43,6 @@ const ContactSection: FC = () => {
   const [captchaValue, setCaptchaValue] = useState<string | null>(null);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
   
-  // State to track if the form has been attempted to be submitted
-  const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
-  
   // Clear message after 5 seconds when it appears
   useEffect(() => {
     if (submitStatus.message) {
@@ -85,33 +82,7 @@ const ContactSection: FC = () => {
     }
   };
   
-  // Validate form without captcha check
-  const validateFormFields = (): boolean => {
-    const newErrors: FormErrors = {};
-    
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name ist erforderlich';
-    }
-    
-    if (!formData.email.trim()) {
-      newErrors.email = 'E-Mail ist erforderlich';
-    } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-      newErrors.email = 'Bitte geben Sie eine gültige E-Mail-Adresse ein';
-    }
-    
-    if (!formData.phone.trim()) {
-      newErrors.phone = 'Telefonnummer ist erforderlich';
-    }
-    
-    if (!formData.message.trim()) {
-      newErrors.message = 'Nachricht ist erforderlich';
-    }
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-  
-  // Full validation including captcha if visible
+  // Validate form
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
     
@@ -133,8 +104,8 @@ const ContactSection: FC = () => {
       newErrors.message = 'Nachricht ist erforderlich';
     }
     
-    // Only validate captcha if it's visible
-    if (showCaptcha && !captchaValue) {
+    // Validate captcha
+    if (!captchaValue) {
       newErrors.captcha = 'Bitte bestätigen Sie, dass Sie kein Roboter sind';
     }
     
@@ -146,17 +117,7 @@ const ContactSection: FC = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    // If captcha is not yet shown, validate form fields and show captcha if valid
-    if (!showCaptcha) {
-      // Validate the form fields first (without captcha)
-      const fieldsValid = validateFormFields();
-      if (fieldsValid) {
-        setShowCaptcha(true);
-      }
-      return;
-    }
-    
-    // With captcha shown, perform full validation
+    // Perform full validation
     if (!validateForm()) {
       return;
     }
@@ -188,12 +149,11 @@ const ContactSection: FC = () => {
           message: ''
         });
         
-        // Reset reCAPTCHA and hide it
+        // Reset reCAPTCHA
         if (recaptchaRef.current) {
           recaptchaRef.current.reset();
         }
         setCaptchaValue(null);
-        setShowCaptcha(false);
         
         setSubmitStatus({
           success: true,
@@ -334,21 +294,19 @@ const ContactSection: FC = () => {
                 )}
               </div>
               
-              {/* Only show reCAPTCHA after the first submission attempt */}
-              {showCaptcha && (
-                <div className="my-4">
-                  <ReCAPTCHA
-                    ref={recaptchaRef}
-                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ''}
-                    onChange={(value: string | null) => setCaptchaValue(value)}
-                    className="transform scale-90 origin-left"
-                    theme="dark"
-                  />
-                  {errors.captcha && (
-                    <p className="mt-1 text-sm text-red-300">{errors.captcha}</p>
-                  )}
-                </div>
-              )}
+              {/* Always show reCAPTCHA */}
+              <div className="my-4">
+                <ReCAPTCHA
+                  ref={recaptchaRef}
+                  sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ''}
+                  onChange={(value: string | null) => setCaptchaValue(value)}
+                  className="transform scale-90 origin-left"
+                  theme="dark"
+                />
+                {errors.captcha && (
+                  <p className="mt-1 text-sm text-red-300">{errors.captcha}</p>
+                )}
+              </div>
               
               <button 
                 type="submit" 
@@ -363,7 +321,7 @@ const ContactSection: FC = () => {
                     </svg>
                     Wird gesendet...
                   </>
-                ) : showCaptcha ? 'Nachricht senden' : 'Formular prüfen'}
+                ) : 'Nachricht senden'}
               </button>
             </form>
           </div>
