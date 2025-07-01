@@ -9,8 +9,14 @@ interface ValidationError {
 }
 
 // Function to verify reCAPTCHA token
-async function verifyRecaptcha(token: string) {
+async function verifyRecaptcha(token: string): Promise<{ success: boolean; error?: string }> {
   try {
+    // Check if secret key is configured
+    if (!process.env.RECAPTCHA_SECRET_KEY) {
+      console.error('RECAPTCHA_SECRET_KEY not configured');
+      return { success: false, error: 'reCAPTCHA not properly configured' };
+    }
+
     const response = await axios.post(
       'https://www.google.com/recaptcha/api/siteverify',
       null,
@@ -18,14 +24,27 @@ async function verifyRecaptcha(token: string) {
         params: {
           secret: process.env.RECAPTCHA_SECRET_KEY,
           response: token
-        }
+        },
+        timeout: 5000 // 5 second timeout
       }
     );
     
-    return response.data.success;
+    const { success, 'error-codes': errorCodes } = response.data;
+    
+    if (!success) {
+      console.error('reCAPTCHA verification failed:', errorCodes);
+      return { 
+        success: false, 
+        error: errorCodes?.includes('timeout-or-duplicate') 
+          ? 'reCAPTCHA expired, please try again' 
+          : 'reCAPTCHA verification failed'
+      };
+    }
+    
+    return { success: true };
   } catch (error) {
     console.error('reCAPTCHA verification error:', error);
-    return false;
+    return { success: false, error: 'reCAPTCHA verification service unavailable' };
   }
 }
 
@@ -47,21 +66,30 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Verify reCAPTCHA
-    if (!recaptchaToken) {
-      return NextResponse.json(
-        { success: false, message: 'reCAPTCHA-Verifizierung erforderlich' },
-        { status: 400 }
-      );
-    }
+    // Verify reCAPTCHA (if configured and token provided)
+    const isRecaptchaConfigured = Boolean(process.env.RECAPTCHA_SECRET_KEY);
     
-    const isRecaptchaValid = await verifyRecaptcha(recaptchaToken);
-    
-    if (!isRecaptchaValid) {
-      return NextResponse.json(
-        { success: false, message: 'reCAPTCHA-Verifizierung fehlgeschlagen' },
-        { status: 400 }
-      );
+    if (isRecaptchaConfigured) {
+      if (!recaptchaToken) {
+        return NextResponse.json(
+          { success: false, message: 'reCAPTCHA-Verifizierung erforderlich' },
+          { status: 400 }
+        );
+      }
+
+      const recaptchaResult = await verifyRecaptcha(recaptchaToken);
+      
+      if (!recaptchaResult.success) {
+        return NextResponse.json(
+          { 
+            success: false, 
+            message: recaptchaResult.error || 'reCAPTCHA-Verifizierung fehlgeschlagen' 
+          },
+          { status: 400 }
+        );
+      }
+    } else {
+      console.warn('reCAPTCHA not configured - proceeding without verification');
     }
     
     // Create a new contact message

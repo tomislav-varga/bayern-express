@@ -104,8 +104,8 @@ const ContactSection: FC = () => {
       newErrors.message = 'Nachricht ist erforderlich';
     }
     
-    // Validate captcha
-    if (!captchaValue) {
+    // Only validate captcha if reCAPTCHA is configured
+    if (process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY && !captchaValue) {
       newErrors.captcha = 'Bitte bestätigen Sie, dass Sie kein Roboter sind';
     }
     
@@ -134,7 +134,8 @@ const ContactSection: FC = () => {
         },
         body: JSON.stringify({
           ...formData,
-          recaptchaToken: captchaValue
+          // Only include reCAPTCHA token if it's configured and has a value
+          ...(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY && captchaValue && { recaptchaToken: captchaValue })
         }),
       });
       
@@ -294,19 +295,27 @@ const ContactSection: FC = () => {
                 )}
               </div>
               
-              {/* Always show reCAPTCHA */}
-              <div className="my-4">
-                <ReCAPTCHA
-                  ref={recaptchaRef}
-                  sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ''}
-                  onChange={(value: string | null) => setCaptchaValue(value)}
-                  className="transform scale-90 origin-left"
-                  theme="dark"
-                />
-                {errors.captcha && (
-                  <p className="mt-1 text-sm text-red-300">{errors.captcha}</p>
-                )}
-              </div>
+              {/* reCAPTCHA - only show if properly configured */}
+              {process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ? (
+                <div className="my-4">
+                  <ReCAPTCHA
+                    ref={recaptchaRef}
+                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+                    onChange={(value: string | null) => setCaptchaValue(value)}
+                    className="transform scale-90 origin-left"
+                    theme="dark"
+                  />
+                  {errors.captcha && (
+                    <p className="mt-1 text-sm text-red-300">{errors.captcha}</p>
+                  )}
+                </div>
+              ) : (
+                <div className="my-4 p-3 bg-yellow-600/20 border border-yellow-400/50 rounded-md">
+                  <p className="text-sm text-yellow-200">
+                    ⚠️ reCAPTCHA nicht konfiguriert. Bitte kontaktieren Sie den Administrator.
+                  </p>
+                </div>
+              )}
               
               <button 
                 type="submit" 
